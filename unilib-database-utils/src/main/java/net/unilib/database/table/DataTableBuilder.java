@@ -33,8 +33,11 @@ public class DataTableBuilder {
 	 * @return {@link DataTableBuilder} instance
 	 */
 	public static DataTableBuilder start(Database database, String name, DataHandlerBuilder handlerBuilder) {
+		INSTANCE.name = name;
+		INSTANCE.database = database;
+		INSTANCE.columns.clear();
 		INSTANCE.handlerBuilder = handlerBuilder;
-		return start(database, name);
+		return INSTANCE;
 	}
 	
 	/**
@@ -88,6 +91,7 @@ public class DataTableBuilder {
 	 */
 	public DataTable build() {
 		DataTable table = new DataTable(database, name, Collections.unmodifiableList(columns));
+		table.createIfNotExist();
 		if (handlerBuilder != null) {
 			handlerBuilder.addTable(table);
 		}
