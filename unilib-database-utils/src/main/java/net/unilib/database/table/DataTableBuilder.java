@@ -47,6 +47,7 @@ public class DataTableBuilder {
 	public static DataTableBuilder start(Database database, String name) {
 		INSTANCE.database = database;
 		INSTANCE.name = name;
+		INSTANCE.columns.clear();
 		return INSTANCE;
 	}
 	
