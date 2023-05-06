@@ -12,7 +12,11 @@ subprojects {
 
 	java {
 		withSourcesJar()
-		//withJavadocJar()
+		withJavadocJar()
+	}
+
+	javadoc {
+		options.addStringOption('Xdoclint:none', '-quiet')
 	}
 
 	publishing {
