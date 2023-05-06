@@ -1,6 +1,7 @@
-# From https://github.com/jitpack/jitpack.io/issues/4506#issuecomment-864562270
+jdk:
+  - openjdk20
 before_install:
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
   - sdk update
-  - sdk install java 20.0.0-tem
-  - sdk use java 20.0.0-tem
+  - sdk install java 20-tem
+  - sdk use java 20-tem
