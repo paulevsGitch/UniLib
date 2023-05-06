@@ -1,9 +1,12 @@
 package net.unilib.database.handler;
 
 import net.unilib.database.table.DataTable;
+import net.unilib.database.table.TableInsertBuilder;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,8 +27,7 @@ public class DataHandler {
 	 * @return {@link ResultSet}
 	 */
 	public ResultSet queryAll(String tableName) {
-		DataTable table = tables.get(tableName);
-		return table == null ? null : table.queryAll();
+		return getTableOrThrow(tableName).queryAll();
 	}
 	
 	/**
@@ -37,8 +39,7 @@ public class DataHandler {
 	 * @return {@link ResultSet}
 	 */
 	public ResultSet query(String tableName, String condition) {
-		DataTable table = tables.get(tableName);
-		return table == null ? null : table.query(condition);
+		return getTableOrThrow(tableName).query(condition);
 	}
 	
 	/**
@@ -49,8 +50,7 @@ public class DataHandler {
 	 * @return {@link ResultSet}
 	 */
 	public ResultSet query(String tableName, String name, Object value) {
-		DataTable table = tables.get(tableName);
-		return table == null ? null : table.query(name, value);
+		return getTableOrThrow(tableName).query(name, value);
 	}
 	
 	/**
@@ -63,8 +63,7 @@ public class DataHandler {
 	 * @return {@link ResultSet}
 	 */
 	public ResultSet query(String tableName, String name1, Object value1, String name2, Object value2) {
-		DataTable table = tables.get(tableName);
-		return table == null ? null : table.query(name1, value1, name2, value2);
+		return getTableOrThrow(tableName).query(name1, value1, name2, value2);
 	}
 	
 	/**
@@ -79,7 +78,52 @@ public class DataHandler {
 	 * @return {@link ResultSet}
 	 */
 	public ResultSet query(String tableName, String name1, Object value1, String name2, Object value2, String name3, Object value3) {
+		return getTableOrThrow(tableName).query(name1, value1, name2, value2, name3, value3);
+	}
+	
+	/**
+	 * Start {@link TableInsertBuilder} for this table
+	 * @param tableName {@link String} name of the table
+	 * @return {@link TableInsertBuilder}
+	 */
+	public TableInsertBuilder startInsert(String tableName) {
+		return getTableOrThrow(tableName).startInsert();
+	}
+	
+	/**
+	 * Insert new row into table
+	 * @param tableName {@link String} name of the table
+	 * @param data {@link Map} that contains new row data
+	 */
+	public void insert(String tableName, Map<String, Object> data) {
+		getTableOrThrow(tableName).insert(data);
+	}
+	
+	/**
+	 * Insert new row into table. Both arguments should have equal size and have same indexes
+	 * @param tableName {@link String} name of the table
+	 * @param names array of {@link String} column names
+	 * @param values array of {@link Object} values
+	 */
+	public void insert(String tableName, String[] names, String[] values) {
+		getTableOrThrow(tableName).insert(names, values);
+	}
+	
+	/**
+	 * Insert new row into table. Both arguments should have equal size and have same indexes
+	 * @param tableName {@link String} name of the table
+	 * @param names {@link List} of {@link String} column names
+	 * @param values {@link List} of {@link Object} values
+	 */
+	public void insert(String tableName, List<String> names, List<Object> values) {
+		getTableOrThrow(tableName).insert(names, values);
+	}
+	
+	private DataTable getTableOrThrow(String tableName) {
 		DataTable table = tables.get(tableName);
-		return table == null ? null : table.query(name1, value1, name2, value2, name3, value3);
+		if (table == null) {
+			throw new RuntimeException("Missing table with name " + tableName);
+		}
+		return table;
 	}
 }
