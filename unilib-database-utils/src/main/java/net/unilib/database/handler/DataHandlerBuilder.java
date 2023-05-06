@@ -41,6 +41,19 @@ public class DataHandlerBuilder {
 	}
 	
 	/**
+	 * Starts building process, will return a builder instance.
+	 * All builders are the same instance (not multi-thread-safe).
+	 * This builder will make {@link DataHandler} for existing database
+	 * @param database {@link Database} that execute this method
+	 * @return {@link DataHandlerBuilder} instance
+	 */
+	public static DataHandlerBuilder start(Database database) {
+		INSTANCE.database = database;
+		INSTANCE.tables.clear();
+		return INSTANCE;
+	}
+	
+	/**
 	 * Add table to the database
 	 * @param table {@link DataTable} to add
 	 * @return {@link DataHandlerBuilder} instance

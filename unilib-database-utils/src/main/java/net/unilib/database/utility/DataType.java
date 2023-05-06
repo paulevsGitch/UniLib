@@ -1,4 +1,4 @@
-package net.unilib.database;
+package net.unilib.database.utility;
 
 /**
  * Types of data that SQL can store. This is not a complete enum of all data types, only for most frequently used

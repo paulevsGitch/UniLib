@@ -1,6 +1,6 @@
 package net.unilib.database.table;
 
-import net.unilib.database.DataType;
+import net.unilib.database.utility.DataType;
 
 public class ColumnEntry {
 	public final String name;

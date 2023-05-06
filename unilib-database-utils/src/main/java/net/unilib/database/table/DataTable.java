@@ -2,11 +2,13 @@ package net.unilib.database.table;
 
 import net.risingworld.api.database.Database;
 import net.risingworld.api.utils.Vector3f;
-import net.unilib.database.DataConvertor;
+import net.unilib.database.utility.DataConvertor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents single table in the {@link Database}.
@@ -122,6 +124,66 @@ public class DataTable {
 		value2 = convertType(value2);
 		value3 = convertType(value3);
 		return query("WHERE `" + name1 + "` = " + value1 + " AND `" + name2 + "` = " + value2 + " AND `" + name3 + "` = " + value3);
+	}
+	
+	/**
+	 * Start {@link TableInsertBuilder} for this table
+	 * @return {@link TableInsertBuilder}
+	 */
+	public TableInsertBuilder startInsert() {
+		return TableInsertBuilder.start(this);
+	}
+	
+	/**
+	 * Insert new row into table
+	 * @param data {@link Map} that contains new row data
+	 */
+	public void insert(Map<String, Object> data) {
+		List<String> names = new ArrayList<>(data.size());
+		List<Object> values = new ArrayList<>(data.size());
+		data.forEach((name, obj) -> {
+			names.add(name);
+			values.add(obj);
+		});
+		insert(names, values);
+	}
+	
+	/**
+	 * Insert new row into table. Both arguments should have equal size and have same indexes.
+	 * @param names array of {@link String} column names
+	 * @param values array of {@link Object} values
+	 */
+	public void insert(String[] names, String[] values) {
+		insert(List.of(names), List.of(values));
+	}
+	
+	/**
+	 * Insert new row into table. Both arguments should have equal size and have same indexes.
+	 * Use {@link TableInsertBuilder} for properly created inserts
+	 * @param names {@link List} of {@link String} column names
+	 * @param values {@link List} of {@link Object} values
+	 */
+	public void insert(List<String> names, List<Object> values) {
+		if (names.isEmpty()) return;
+		StringBuilder builder = new StringBuilder("INSERT INTO `");
+		builder.append(name);
+		
+		builder.append("` (`");
+		builder.append(names.get(0));
+		for (short i = 1; i < names.size(); i++) {
+			builder.append("`, `");
+			builder.append(names.get(i));
+		}
+		
+		builder.append("`) VALUES ('");
+		builder.append(convertType(values.get(0)));
+		for (short i = 1; i < names.size(); i++) {
+			builder.append("', '");
+			builder.append(convertType(values.get(i)));
+		}
+		builder.append("')");
+		
+		database.executeUpdate(builder.toString());
 	}
 	
 	private Object convertType(Object obj) {

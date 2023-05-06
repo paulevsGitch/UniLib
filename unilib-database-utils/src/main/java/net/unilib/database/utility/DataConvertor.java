@@ -1,4 +1,4 @@
-package net.unilib.database;
+package net.unilib.database.utility;
 
 import net.risingworld.api.utils.Vector3f;
 
