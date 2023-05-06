@@ -1,11 +1,15 @@
 package net.unilib.database.handler;
 
+import net.risingworld.api.database.Database;
 import net.unilib.database.table.DataTable;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Single {@link Database} storage that can read, write and update database
+ */
 public class DataHandler {
 	private final Map<String, DataTable> tables = new HashMap<>();
 	

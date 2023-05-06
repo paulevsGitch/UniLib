@@ -38,6 +38,7 @@ public class DataHandlerBuilder {
 	}
 	
 	public DataHandler build() {
+		tables.values().forEach(DataTable::createIfNotExist);
 		return new DataHandler(tables);
 	}
 }
