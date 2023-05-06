@@ -1,0 +1,17 @@
+plugins {
+	id 'java'
+}
+
+archivesBaseName = 'unilib-database-utils'
+version = '0.1.0'
+
+sourceCompatibility = JavaVersion.VERSION_20
+targetCompatibility = JavaVersion.VERSION_20
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation files('./../libs/PluginAPI.jar')
+}
