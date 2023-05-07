@@ -186,6 +186,55 @@ public class DataTable {
 		database.executeUpdate(builder.toString());
 	}
 	
+	/**
+	 * Remove row in table with condition (SQL language).
+	 * <br>
+	 * Example: delete("WHERE `id` = 5")
+	 * @param condition {@link String} representation of SQL condition
+	 */
+	public void delete(String condition) {
+		database.executeUpdate("DELETE * FROM `" + name + "` " + condition);
+	}
+	
+	/**
+	 * Remove row in table with one condition (object equals value)
+	 * @param name {@link String} column name
+	 * @param value {@link Object} value to check
+	 */
+	public void delete(String name, Object value) {
+		value = convertType(value);
+		delete("WHERE `" + name + "` = " + value);
+	}
+	
+	/**
+	 * Remove row in table with two conditions (object equals value)
+	 * @param name1 {@link String} first column name
+	 * @param value1 {@link Object} first value to check
+	 * @param name2 {@link String} second column name
+	 * @param value2 {@link Object} second value to check
+	 */
+	public void delete(String name1, Object value1, String name2, Object value2) {
+		value1 = convertType(value1);
+		value2 = convertType(value2);
+		delete("WHERE `" + name1 + "` = " + value1 + " AND `" + name2 + "` = " + value2);
+	}
+	
+	/**
+	 * Remove row in table with three conditions (object equals value)
+	 * @param name1 {@link String} first column name
+	 * @param value1 {@link Object} first value to check
+	 * @param name2 {@link String} second column name
+	 * @param value2 {@link Object} second value to check
+	 * @param name3 {@link String} third column name
+	 * @param value3 {@link Object} third value to check
+	 */
+	public void delete(String name1, Object value1, String name2, Object value2, String name3, Object value3) {
+		value1 = convertType(value1);
+		value2 = convertType(value2);
+		value3 = convertType(value3);
+		delete("WHERE `" + name1 + "` = " + value1 + " AND `" + name2 + "` = " + value2 + " AND `" + name3 + "` = " + value3);
+	}
+	
 	private Object convertType(Object obj) {
 		if (obj instanceof Vector3f vec) return DataConvertor.vectorToBinary(vec);
 		return obj;

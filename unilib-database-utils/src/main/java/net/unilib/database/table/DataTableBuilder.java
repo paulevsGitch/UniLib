@@ -1,6 +1,7 @@
 package net.unilib.database.table;
 
 import net.risingworld.api.database.Database;
+import net.unilib.database.utility.DataConvertor;
 import net.unilib.database.utility.DataType;
 import net.unilib.database.handler.DataHandlerBuilder;
 
@@ -79,7 +80,16 @@ public class DataTableBuilder {
 	 * @return {@link DataTableBuilder} instance
 	 */
 	public DataTableBuilder addVectorColumn(String name) {
-		return this.addColumn(name, DataType.BINARY, 12);
+		return this.addColumn(name, DataType.BINARY, DataConvertor.VECTOR_BYTES);
+	}
+	
+	/**
+	 * Add column that will store a {@link net.risingworld.api.utils.Quaternion} values
+	 * @param name {@link String} column name
+	 * @return {@link DataTableBuilder} instance
+	 */
+	public DataTableBuilder addQuaternionColumn(String name) {
+		return this.addColumn(name, DataType.BINARY, DataConvertor.QUATERNION_BYTES);
 	}
 	
 	/**
