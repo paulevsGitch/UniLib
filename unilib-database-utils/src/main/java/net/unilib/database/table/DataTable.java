@@ -1,7 +1,9 @@
 package net.unilib.database.table;
 
 import net.risingworld.api.database.Database;
+import net.risingworld.api.utils.Quaternion;
 import net.risingworld.api.utils.Vector3f;
+import net.risingworld.api.utils.Vector3i;
 import net.unilib.database.utility.DataConvertor;
 
 import java.sql.ResultSet;
@@ -312,6 +314,8 @@ public class DataTable {
 	
 	private Object convertType(Object obj) {
 		if (obj instanceof Vector3f vec) return DataConvertor.vectorToBinary(vec);
+		if (obj instanceof Vector3i vec) return DataConvertor.vectorToBinary(vec);
+		if (obj instanceof Quaternion q) return DataConvertor.quaternionToBinary(q);
 		return obj;
 	}
 }
