@@ -1,2 +1,2 @@
 include 'unilib-database-utils'
-include 'test-module'
+include 'unilib-config-utils'
