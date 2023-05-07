@@ -235,6 +235,81 @@ public class DataTable {
 		delete("WHERE `" + name1 + "` = " + value1 + " AND `" + name2 + "` = " + value2 + " AND `" + name3 + "` = " + value3);
 	}
 	
+	/**
+	 * Start {@link TableUpdateBuilder} for this table
+	 * @param condition {@link String} representation of SQL condition
+	 * @return {@link TableUpdateBuilder}
+	 */
+	public TableUpdateBuilder startUpdate(String condition) {
+		return TableUpdateBuilder.start(this, condition);
+	}
+	
+	/**
+	 * Start {@link TableUpdateBuilder} for this table with one condition (object equals value)
+	 * @param name {@link String} column name
+	 * @param value {@link Object} value to check
+	 */
+	public TableUpdateBuilder startUpdate(String name, Object value) {
+		value = convertType(value);
+		return startUpdate("WHERE `" + name + "` = " + value);
+	}
+	
+	/**
+	 * Start {@link TableUpdateBuilder} for this table with two conditions (object equals value)
+	 * @param name1 {@link String} first column name
+	 * @param value1 {@link Object} first value to check
+	 * @param name2 {@link String} second column name
+	 * @param value2 {@link Object} second value to check
+	 */
+	public TableUpdateBuilder startUpdate(String name1, Object value1, String name2, Object value2) {
+		value1 = convertType(value1);
+		value2 = convertType(value2);
+		return startUpdate("WHERE `" + name1 + "` = " + value1 + " AND `" + name2 + "` = " + value2);
+	}
+	
+	/**
+	 * Start {@link TableUpdateBuilder} for this table with three conditions (object equals value)
+	 * @param name1 {@link String} first column name
+	 * @param value1 {@link Object} first value to check
+	 * @param name2 {@link String} second column name
+	 * @param value2 {@link Object} second value to check
+	 * @param name3 {@link String} third column name
+	 * @param value3 {@link Object} third value to check
+	 */
+	public TableUpdateBuilder startUpdate(String name1, Object value1, String name2, Object value2, String name3, Object value3) {
+		value1 = convertType(value1);
+		value2 = convertType(value2);
+		value3 = convertType(value3);
+		return startUpdate("WHERE `" + name1 + "` = " + value1 + " AND `" + name2 + "` = " + value2 + " AND `" + name3 + "` = " + value3);
+	}
+	
+	/**
+	 * Update existing row in the table. Both arguments should have equal size and have same indexes.
+	 * Use {@link TableInsertBuilder} for properly created inserts
+	 * @param condition {@link String} representation of SQL condition
+	 * @param data {@link Map} of column names and values
+	 */
+	public void update(String condition, Map<String, Object> data) {
+		if (data.isEmpty()) return;
+		StringBuilder builder = new StringBuilder("UPDATE `");
+		builder.append(name);
+		builder.append("` SET");
+		
+		data.forEach((name, obj) -> {
+			builder.append(" '");
+			builder.append(name);
+			builder.append("' = ");
+			builder.append(obj);
+			builder.append(",");
+		});
+		
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append(" ");
+		builder.append(condition);
+		
+		database.executeUpdate(builder.toString());
+	}
+	
 	private Object convertType(Object obj) {
 		if (obj instanceof Vector3f vec) return DataConvertor.vectorToBinary(vec);
 		return obj;

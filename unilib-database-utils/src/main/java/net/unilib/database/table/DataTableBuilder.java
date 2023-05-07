@@ -1,9 +1,9 @@
 package net.unilib.database.table;
 
 import net.risingworld.api.database.Database;
+import net.unilib.database.handler.DataHandlerBuilder;
 import net.unilib.database.utility.DataConvertor;
 import net.unilib.database.utility.DataType;
-import net.unilib.database.handler.DataHandlerBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;

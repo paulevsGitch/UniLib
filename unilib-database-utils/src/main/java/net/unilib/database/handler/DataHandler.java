@@ -4,7 +4,6 @@ import net.unilib.database.table.DataTable;
 import net.unilib.database.table.TableInsertBuilder;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
