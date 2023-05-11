@@ -1,0 +1,14 @@
+dependencies {
+	implementation files('./../libs/PluginAPI.jar')
+}
+
+task copyJar {
+	doLast {
+		copy {
+			from jar
+			into "./../build/distributions"
+		}
+	}
+}
+
+build.finalizedBy(copyJar)
