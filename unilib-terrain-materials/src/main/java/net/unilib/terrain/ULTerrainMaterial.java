@@ -1,5 +1,8 @@
 package net.unilib.terrain;
 
+/**
+ * Terrain data storage
+ */
 public class ULTerrainMaterial {
 	public final String name;
 	public final int rgba;
