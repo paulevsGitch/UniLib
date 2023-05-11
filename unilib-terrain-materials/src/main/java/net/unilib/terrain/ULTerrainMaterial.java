@@ -5,9 +5,9 @@ public class ULTerrainMaterial {
 	public final int rgba;
 	public final byte id;
 	
-	protected ULTerrainMaterial(int id, String name, int rgba) {
-		this.id = (byte) id;
+	protected ULTerrainMaterial(byte id, String name, int argb) {
+		this.id = id;
 		this.name = name;
-		this.rgba = rgba;
+		this.rgba = argb;
 	}
 }
