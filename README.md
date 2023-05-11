@@ -19,7 +19,17 @@ embedded library (packed inside plugin jar).
 ### Available Modules:
 
 1. **unilib-database-utils**
+	- Database management module
+	- Create databases, tables and requests with builders
+	- Locate databases in world, plugin or custom directories
+	- Store different data types (including Vector3f and Vector3i)
+	- Update, remove and add new data into tables with builders
+	- Don't require SQL syntax knowledge
 2. **unilib-config-utils**
+	- Config managment module
+	- Create simple configs in .conf format (in plugin folder)
+	- Store primitives and custom classes
+	- Comment any entry with as many comments as needed
 
 ### Planned Modules:
 1. **math module** - some useful mathematical operations and fast trigonomentric functions
