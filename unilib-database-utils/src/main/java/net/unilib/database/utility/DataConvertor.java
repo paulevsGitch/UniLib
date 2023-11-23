@@ -24,8 +24,9 @@ public class DataConvertor {
 	 */
 	public static String vectorToBinary(Vector3f vector) {
 		StringBuilder builder = new StringBuilder(VECTOR_STRING_LENGTH);
-		builder.append("0x");
+		builder.append("'0x");
 		toBinaryString(builder, vector.x, vector.y, vector.z);
+		builder.append("'");
 		return builder.toString();
 	}
 	
@@ -105,8 +106,9 @@ public class DataConvertor {
 	 */
 	public static String quaternionToBinary(Quaternion quaternion) {
 		StringBuilder builder = new StringBuilder(QUATERNION_STRING_LENGTH);
-		builder.append("0x");
+		builder.append("'0x");
 		toBinaryString(builder, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+		builder.append("'");
 		return builder.toString();
 	}
 	
