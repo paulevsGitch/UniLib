@@ -15,6 +15,7 @@ public class DataConvertor {
 	public static final int QUATERNION_BYTES = 4 * 4;
 	private static final int VECTOR_STRING_LENGTH = VECTOR_BYTES * 2 + 2;
 	private static final int QUATERNION_STRING_LENGTH = QUATERNION_BYTES * 2 + 2;
+	private static final StringBuffer CONVERT_BUFFER = new StringBuffer(8);
 	
 	/**
 	 * Convert vector into binary string (to store in BINARY(12) format)
@@ -63,8 +64,9 @@ public class DataConvertor {
 	 */
 	public static String vectorToBinary(Vector3i vector) {
 		StringBuilder builder = new StringBuilder(VECTOR_STRING_LENGTH);
-		builder.append("0x");
+		builder.append("'0x");
 		toBinaryString(builder, vector.x, vector.y, vector.z);
+		builder.append("'");
 		return builder.toString();
 	}
 	
@@ -147,13 +149,24 @@ public class DataConvertor {
 	
 	private static void toBinaryString(StringBuilder builder, float... values) {
 		for (float value : values) {
-			builder.append(Integer.toHexString(Float.floatToIntBits(value)));
+			builder.append(toBinary(Float.floatToIntBits(value)));
 		}
 	}
 	
 	private static void toBinaryString(StringBuilder builder, int... values) {
 		for (int value : values) {
-			builder.append(Integer.toHexString(value));
+			builder.append(toBinary(value));
 		}
+	}
+	
+	private static CharSequence toBinary(int value) {
+		String hex = Integer.toHexString(value);
+		if (hex.length() == 8) return hex;
+		CONVERT_BUFFER.setLength(0);
+		for (byte i = (byte) hex.length(); i < 8; i++) {
+			CONVERT_BUFFER.append('0');
+		}
+		CONVERT_BUFFER.append(hex);
+		return CONVERT_BUFFER;
 	}
 }
