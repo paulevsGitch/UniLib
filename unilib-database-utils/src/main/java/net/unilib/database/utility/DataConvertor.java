@@ -13,21 +13,24 @@ import java.sql.SQLException;
 public class DataConvertor {
 	public static final int VECTOR_BYTES = 3 * 4;
 	public static final int QUATERNION_BYTES = 4 * 4;
-	private static final int VECTOR_STRING_LENGTH = VECTOR_BYTES * 2 + 2;
-	private static final int QUATERNION_STRING_LENGTH = QUATERNION_BYTES * 2 + 2;
-	private static final StringBuffer CONVERT_BUFFER = new StringBuffer(8);
+	private static final StringBuffer TO_STR = new StringBuffer(Math.max(VECTOR_BYTES * 2 + 4, QUATERNION_BYTES * 2 + 4));
+	private static final StringBuffer FROM_STR = new StringBuffer(8);
+	private static final String BIN_START = "'0x";
+	private static final String BIN_END = "'";
 	
 	/**
 	 * Convert vector into binary string (to store in BINARY(12) format)
 	 * @param vector {@link Vector3f} input
 	 * @return {@link String} binary representation
 	 */
-	public static String vectorToBinary(Vector3f vector) {
-		StringBuilder builder = new StringBuilder(VECTOR_STRING_LENGTH);
-		builder.append("'0x");
-		toBinaryString(builder, vector.x, vector.y, vector.z);
-		builder.append("'");
-		return builder.toString();
+	public static CharSequence vectorToBinary(Vector3f vector) {
+		TO_STR.setLength(0);
+		TO_STR.append(BIN_START);
+		TO_STR.append(toBinary(vector.x));
+		TO_STR.append(toBinary(vector.y));
+		TO_STR.append(toBinary(vector.z));
+		TO_STR.append(BIN_END);
+		return TO_STR;
 	}
 	
 	/**
@@ -35,10 +38,11 @@ public class DataConvertor {
 	 * @param binaryString {@link String} to convert
 	 * @return {@link Vector3f}
 	 */
-	public static Vector3f vector3fFromBinary(String binaryString) {
-		float x = parseFloat(binaryString.substring(2, 10));
-		float y = parseFloat(binaryString.substring(10, 18));
-		float z = parseFloat(binaryString.substring(18, 26));
+	public static Vector3f vector3fFromBinary(CharSequence binaryString) {
+		int index = binaryString.charAt(0) == '\'' ? 3 : 2;
+		float x = Float.intBitsToFloat((int) Long.parseLong(binaryString, index, index + 8, 16));
+		float y = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 8, index + 16, 16));
+		float z = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 16, index + 24, 16));
 		return new Vector3f(x, y, z);
 	}
 	
@@ -63,12 +67,14 @@ public class DataConvertor {
 	 * @param vector {@link Vector3i} input
 	 * @return {@link String} binary representation
 	 */
-	public static String vectorToBinary(Vector3i vector) {
-		StringBuilder builder = new StringBuilder(VECTOR_STRING_LENGTH);
-		builder.append("'0x");
-		toBinaryString(builder, vector.x, vector.y, vector.z);
-		builder.append("'");
-		return builder.toString();
+	public static CharSequence vectorToBinary(Vector3i vector) {
+		TO_STR.setLength(0);
+		TO_STR.append(BIN_START);
+		TO_STR.append(toBinary(vector.x));
+		TO_STR.append(toBinary(vector.y));
+		TO_STR.append(toBinary(vector.z));
+		TO_STR.append(BIN_END);
+		return TO_STR;
 	}
 	
 	/**
@@ -76,10 +82,11 @@ public class DataConvertor {
 	 * @param binaryString {@link String} to convert
 	 * @return {@link Vector3i}
 	 */
-	public static Vector3i vector3iFromBinary(String binaryString) {
-		int x = parseInt(binaryString.substring(2, 10));
-		int y = parseInt(binaryString.substring(10, 18));
-		int z = parseInt(binaryString.substring(18, 26));
+	public static Vector3i vector3iFromBinary(CharSequence binaryString) {
+		int index = binaryString.charAt(0) == '\'' ? 3 : 2;
+		int x = (int) Long.parseLong(binaryString, index, index + 8, 16);
+		int y = (int) Long.parseLong(binaryString, index + 8, index + 16, 16);
+		int z = (int) Long.parseLong(binaryString, index + 16, index + 24, 16);
 		return new Vector3i(x, y, z);
 	}
 	
@@ -104,12 +111,15 @@ public class DataConvertor {
 	 * @param quaternion {@link Quaternion} input
 	 * @return {@link String} binary representation
 	 */
-	public static String quaternionToBinary(Quaternion quaternion) {
-		StringBuilder builder = new StringBuilder(QUATERNION_STRING_LENGTH);
-		builder.append("'0x");
-		toBinaryString(builder, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
-		builder.append("'");
-		return builder.toString();
+	public static CharSequence quaternionToBinary(Quaternion quaternion) {
+		TO_STR.setLength(0);
+		TO_STR.append(BIN_START);
+		TO_STR.append(toBinary(quaternion.x));
+		TO_STR.append(toBinary(quaternion.y));
+		TO_STR.append(toBinary(quaternion.z));
+		TO_STR.append(toBinary(quaternion.w));
+		TO_STR.append(BIN_END);
+		return TO_STR;
 	}
 	
 	/**
@@ -117,11 +127,12 @@ public class DataConvertor {
 	 * @param binaryString {@link String} to convert
 	 * @return {@link Quaternion}
 	 */
-	public static Quaternion quaternionFromBinary(String binaryString) {
-		float x = parseFloat(binaryString.substring(2, 10));
-		float y = parseFloat(binaryString.substring(10, 18));
-		float z = parseFloat(binaryString.substring(18, 26));
-		float w = parseFloat(binaryString.substring(26, 34));
+	public static Quaternion quaternionFromBinary(CharSequence binaryString) {
+		int index = binaryString.charAt(0) == '\'' ? 3 : 2;
+		float x = Float.intBitsToFloat((int) Long.parseLong(binaryString, index, index + 8, 16));
+		float y = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 8, index + 16, 16));
+		float z = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 16, index + 24, 16));
+		float w = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 24, index + 32, 16));
 		return new Quaternion(x, y, z, w);
 	}
 	
@@ -141,34 +152,18 @@ public class DataConvertor {
 		}
 	}
 	
-	private static int parseInt(String string) {
-		return (int) Long.parseLong(string, 16);
-	}
-	
-	private static float parseFloat(String string) {
-		return Float.intBitsToFloat((int) Long.parseLong(string, 16));
-	}
-	
-	private static void toBinaryString(StringBuilder builder, float... values) {
-		for (float value : values) {
-			builder.append(toBinary(Float.floatToIntBits(value)));
-		}
-	}
-	
-	private static void toBinaryString(StringBuilder builder, int... values) {
-		for (int value : values) {
-			builder.append(toBinary(value));
-		}
+	private static CharSequence toBinary(float value) {
+		return toBinary(Float.floatToIntBits(value));
 	}
 	
 	private static CharSequence toBinary(int value) {
 		String hex = Integer.toHexString(value);
 		if (hex.length() == 8) return hex;
-		CONVERT_BUFFER.setLength(0);
+		FROM_STR.setLength(0);
 		for (byte i = (byte) hex.length(); i < 8; i++) {
-			CONVERT_BUFFER.append('0');
+			FROM_STR.append('0');
 		}
-		CONVERT_BUFFER.append(hex);
-		return CONVERT_BUFFER;
+		FROM_STR.append(hex);
+		return FROM_STR;
 	}
 }
