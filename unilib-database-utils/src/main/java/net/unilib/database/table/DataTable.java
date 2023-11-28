@@ -177,13 +177,13 @@ public class DataTable {
 			builder.append(names.get(i));
 		}
 		
-		builder.append("`) VALUES ('");
+		builder.append("`) VALUES (");
 		builder.append(convertType(values.get(0)));
 		for (short i = 1; i < names.size(); i++) {
-			builder.append("', '");
+			builder.append(", ");
 			builder.append(convertType(values.get(i)));
 		}
-		builder.append("')");
+		builder.append(")");
 		
 		database.executeUpdate(builder.toString());
 	}
