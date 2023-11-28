@@ -126,7 +126,6 @@ public class DataConvertor {
 	 * @return {@link Quaternion}
 	 */
 	public static Quaternion quaternionFromBinary(CharSequence binaryString) {
-		int index = binaryString.charAt(0) == '\'' ? 3 : 2;
 		float x = Float.intBitsToFloat((int) Long.parseLong(binaryString, 2, 10, 16));
 		float y = Float.intBitsToFloat((int) Long.parseLong(binaryString, 10, 18, 16));
 		float z = Float.intBitsToFloat((int) Long.parseLong(binaryString, 18, 26, 16));
