@@ -13,9 +13,9 @@ import java.sql.SQLException;
 public class DataConvertor {
 	public static final int VECTOR_BYTES = 3 * 4;
 	public static final int QUATERNION_BYTES = 4 * 4;
-	private static final StringBuffer TO_STR = new StringBuffer(Math.max(VECTOR_BYTES * 2 + 4, QUATERNION_BYTES * 2 + 4));
+	private static final StringBuffer TO_STR = new StringBuffer(Math.max(VECTOR_BYTES * 2, QUATERNION_BYTES * 2) + 3);
 	private static final StringBuffer FROM_STR = new StringBuffer(8);
-	private static final String BIN_START = "'0x";
+	private static final String BIN_START = "X'";
 	private static final String BIN_END = "'";
 	
 	/**
@@ -39,10 +39,9 @@ public class DataConvertor {
 	 * @return {@link Vector3f}
 	 */
 	public static Vector3f vector3fFromBinary(CharSequence binaryString) {
-		int index = binaryString.charAt(0) == '\'' ? 3 : 2;
-		float x = Float.intBitsToFloat((int) Long.parseLong(binaryString, index, index + 8, 16));
-		float y = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 8, index + 16, 16));
-		float z = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 16, index + 24, 16));
+		float x = Float.intBitsToFloat((int) Long.parseLong(binaryString, 2, 10, 16));
+		float y = Float.intBitsToFloat((int) Long.parseLong(binaryString, 10, 18, 16));
+		float z = Float.intBitsToFloat((int) Long.parseLong(binaryString, 18, 26, 16));
 		return new Vector3f(x, y, z);
 	}
 	
@@ -83,10 +82,9 @@ public class DataConvertor {
 	 * @return {@link Vector3i}
 	 */
 	public static Vector3i vector3iFromBinary(CharSequence binaryString) {
-		int index = binaryString.charAt(0) == '\'' ? 3 : 2;
-		int x = (int) Long.parseLong(binaryString, index, index + 8, 16);
-		int y = (int) Long.parseLong(binaryString, index + 8, index + 16, 16);
-		int z = (int) Long.parseLong(binaryString, index + 16, index + 24, 16);
+		int x = (int) Long.parseLong(binaryString, 2, 10, 16);
+		int y = (int) Long.parseLong(binaryString, 10, 18, 16);
+		int z = (int) Long.parseLong(binaryString, 18, 26, 16);
 		return new Vector3i(x, y, z);
 	}
 	
@@ -129,10 +127,10 @@ public class DataConvertor {
 	 */
 	public static Quaternion quaternionFromBinary(CharSequence binaryString) {
 		int index = binaryString.charAt(0) == '\'' ? 3 : 2;
-		float x = Float.intBitsToFloat((int) Long.parseLong(binaryString, index, index + 8, 16));
-		float y = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 8, index + 16, 16));
-		float z = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 16, index + 24, 16));
-		float w = Float.intBitsToFloat((int) Long.parseLong(binaryString, index + 24, index + 32, 16));
+		float x = Float.intBitsToFloat((int) Long.parseLong(binaryString, 2, 10, 16));
+		float y = Float.intBitsToFloat((int) Long.parseLong(binaryString, 10, 18, 16));
+		float z = Float.intBitsToFloat((int) Long.parseLong(binaryString, 18, 26, 16));
+		float w = Float.intBitsToFloat((int) Long.parseLong(binaryString, 26, 34, 16));
 		return new Quaternion(x, y, z, w);
 	}
 	
